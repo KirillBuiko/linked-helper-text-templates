@@ -3,8 +3,9 @@ import InsertConditionalBlockButton from "@/components/InsertConditionalBlockBut
 import TemplateRecursiveBlock from "@/components/TemplateRecursiveBlock";
 import TemplateActionsButtonPanel from "@/components/TemplateActionsButtonPanel";
 import {useState} from "react";
+import styles from './TemplateEditWidget.module.scss';
 
-export default function TemplateEditPage(
+export default function TemplateEditWidget(
     {callbackSave, arrVarNames, template}:
         {
             callbackSave: (template: string) => Promise<void>,
@@ -62,7 +63,7 @@ export default function TemplateEditPage(
     }
 
     return (
-        <div>
+        <div className={styles.wrapper}>
             <h1>Message Template Editor</h1>
             <VariablesBlock arrVarNames={arrVarNames} onVariableClick={insertVariable}/>
             <InsertConditionalBlockButton onInsertClick={insertConditionalBlock}/>

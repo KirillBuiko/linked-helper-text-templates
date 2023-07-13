@@ -1,6 +1,7 @@
 import TemplateConditionalBlock from "@/components/TemplateConditionalBlock";
 import TemplateTextBlock from "@/components/TemplateTextBlock";
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
+import styles from './TemplateRecursiveBlock.module.scss';
 
 export default function TemplateRecursiveBlock(
     {props}:
@@ -15,7 +16,7 @@ export default function TemplateRecursiveBlock(
             break;
     }
     return (
-        <div>
+        <div className={styles.wrapper}>
             {templateBlock}
             {props.currentNode.nextNode && <TemplateRecursiveBlock props={props}/>}
         </div>

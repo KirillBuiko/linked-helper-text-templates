@@ -5,19 +5,15 @@ enum TemplateNodeType {
 
 abstract class TemplateNode {
     nextNode: TemplateNode | null;
-    type;
 
-    protected constructor(type: TemplateNodeType) {
+    protected constructor(public type: TemplateNodeType, public text = "") {
         this.nextNode = null;
-        this.type = type;
     }
 }
 
 class TemplateTextNode extends TemplateNode {
-    text: string;
-
     constructor(text = "") {
-        super(TemplateNodeType.TEXT_NODE);
+        super(TemplateNodeType.TEXT_NODE, text);
         this.text = text;
     }
 
@@ -33,13 +29,11 @@ class TemplateTextNode extends TemplateNode {
 }
 
 class TemplateConditionalNode extends TemplateNode {
-    variable: string;
     thenNode: TemplateTextNode;
     elseNode: TemplateTextNode;
 
-    constructor(variable: string = "") {
-        super(TemplateNodeType.CONDITIONAL_NODE);
-        this.variable = variable;
+    constructor(text: string = "") {
+        super(TemplateNodeType.CONDITIONAL_NODE, text);
         this.thenNode = new TemplateTextNode("");
         this.elseNode = new TemplateTextNode("");
     }

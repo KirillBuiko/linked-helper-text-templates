@@ -1,22 +1,23 @@
-import IfVariableSelect from "@/components/IfVariableSelect";
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
 import TemplateRecursiveBlock from "@/components/TemplateRecursiveBlock";
 import IfIcon from "@/icons/IfIcon";
 import DeleteIcon from "@/icons/DeleteIcon";
 import ElseIcon from "@/icons/ElseIcon";
 import ThenIcon from "@/icons/ThenIcon";
+import styles from './TemplateConditionalBlock.module.scss';
+import TemplateTextBlock from "@/components/TemplateTextBlock";
 
 export default function TemplateConditionalBlock(
     {props}:
         { props: TemplateBlockPropsType }) {
     return (
-        <div>
+        <div className={styles.wrapper}>
             <div>
                 <div>
                     <IfIcon/>
                     <span><DeleteIcon/></span>
                 </div>
-                <IfVariableSelect props={props}/>
+                <TemplateTextBlock props={props}/>
             </div>
             <div>
                 <ThenIcon/>
