@@ -18,6 +18,18 @@
     padding-right: 10px;
   }
 
+  .thenWrapper {
+    display: flex;
+    flex-direction: column;
+
+    .thenElseLine {
+      display: flex;
+      flex: 1 0;
+      width: 50%;
+      border-right: 2px dashed white;
+    }
+  }
+
   .blockText {
     display: flex;
     width: 100%;

@@ -20,19 +20,15 @@ export default function TemplateConditionalBlock({props}: Props) {
                 <div className={styles.ifBlockDescription + " " + styles.blockText}>
                     <TemplateTextBlock props={{
                         ...props,
-                        setLastClickedBlock: () => {
-                        },
-                        setLastClickedIndex: () => {
-                        },
                         placeholder: "Write condition like {variable1}{variable2}"
                     }}/>
                 </div>
             </div>
             <div className={styles.blockRow}>
                 <div className={styles.blockDescription}>
-                    <div>
+                    <div className={styles.thenWrapper}>
                         <ThenIcon/>
-                        <div style={{width: "50%", height: "100%", borderRight: "2px dashed white"}}/>
+                        <div className={styles.thenElseLine}/>
                     </div>
                 </div>
                 <div className={styles.blockText}>

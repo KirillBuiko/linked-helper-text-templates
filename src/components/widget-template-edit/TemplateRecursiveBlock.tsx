@@ -3,7 +3,7 @@ import TemplateTextBlock from "@/components/widget-template-edit/TemplateTextBlo
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
 import styles from './TemplateRecursiveBlock.module.scss';
 import {TemplateNodeType} from "@/classes/TemplateTree";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 
 type Props = { props: TemplateBlockPropsType }
 export default function TemplateRecursiveBlock({props}: Props) {
@@ -24,17 +24,13 @@ export default function TemplateRecursiveBlock({props}: Props) {
     }
     return (
         <div className={styles.wrapper} style={{clipPath: `inset(0 0 ${clip}% 0)`}}>
-            <div className={styles.currentNode}>
-                {templateBlock}
-            </div>
-            <div className={styles.nextNode}>
-                {props.currentNode.nextNode &&
-                    <TemplateRecursiveBlock props={{
-                        ...props,
-                        currentNode: props.currentNode.nextNode
-                    }}/>
-                }
-            </div>
+            {templateBlock}
+            {props.currentNode.nextNode &&
+                <TemplateRecursiveBlock props={{
+                    ...props,
+                    currentNode: props.currentNode.nextNode
+                }}/>
+            }
         </div>
     );
 }

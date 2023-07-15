@@ -82,7 +82,7 @@ export class TemplateTree {
         if (newTextNode.text !== "") {
             node.text = node.text.slice(0, cursor);
         }
-        const newConditionalNode = new TemplateConditionalNode(this.arrVarNames[0]);
+        const newConditionalNode = new TemplateConditionalNode(this.arrVarNames[0] ?? "");
 
         // Linking new nodes like (current -> conditionalNode -> textNode -> currentNext);
         newTextNode.nextNode = node.nextNode;

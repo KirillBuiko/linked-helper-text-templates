@@ -1,10 +1,8 @@
 import VariablesBlock from "@/components/widget-template-edit/VariablesBlock";
-import InsertConditionalBlockButton
-    from "@/controls/insert-buttons/InsertConditionalBlockButton";
+import InsertConditionalBlockButton from "@/controls/insert-buttons/InsertConditionalBlockButton";
 import TemplateRecursiveBlock from "@/components/widget-template-edit/TemplateRecursiveBlock";
 import TemplateActionButtonsPanel from "@/components/widget-template-edit/TemplateActionButtonsPanel";
-import {TemplateTree, type TemplateTextNode, type TemplateNode}
-    from "@/classes/TemplateTree"
+import {type TemplateNode, TemplateNodeType, type TemplateTextNode, TemplateTree} from "@/classes/TemplateTree"
 import {useState} from "react";
 import styles from "./WidgetTemplateEdit.module.scss";
 import ControlButton from "@/controls/ControlButton";
@@ -42,19 +40,19 @@ export default function WidgetTemplateEdit({callbackSave, arrVarNames, template}
     }
 
     function insertConditionalBlock() {
-        if (lastClickedBlock && (lastClickedIndex !== null) && arrVarNames.length > 0) {
+        // TODO: Think about on conditional node click behavior!
+        if(lastClickedBlock.type !== TemplateNodeType.CONDITIONAL_NODE) {
             templateTree.insertConditionalNode(lastClickedBlock, lastClickedIndex);
             updateTemplateTree();
         }
     }
 
     function onSave() {
-        // TODO: ask user about save, notify about successful save (no)
         callbackSave(templateTree.toString());
     }
 
     function onClose() {
-
+        // TODO: ask user about save
     }
 
     function onPreview() {
