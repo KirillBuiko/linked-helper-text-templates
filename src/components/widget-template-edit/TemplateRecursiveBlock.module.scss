@@ -1,0 +1,17 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: stretch;
+  width: 100%;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.5s;
+  //overflow: hidden;
+
+  .currentNode {
+    width: 100%;
+  }
+
+  .nextNode {
+    width: 100%;
+  }
+}

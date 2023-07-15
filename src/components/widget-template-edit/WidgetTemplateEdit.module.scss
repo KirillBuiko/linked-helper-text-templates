@@ -1,0 +1,67 @@
+@use '@/assets/colors';
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  background: colors.$dark-background-color;
+  color: colors.$dark-text-color;
+  overflow: hidden;
+
+  .insertPanelWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    flex: 0 0 300px;
+    gap: 20px;
+    overflow-y: auto;
+    border-right: 2px solid white;
+  }
+
+  .mainWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0;
+    padding: 20px;
+    overflow: hidden;
+
+    .widgetHeader {
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .variableButtonsWrapper {
+      flex: 0 0 30px;
+      width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .templateBlocksWrapper {
+      flex: 1 0;
+      width: 100%;
+      overflow: auto;
+      margin-top: 10px;
+      margin-bottom: 10px;
+
+      .templateBlocks {
+        width: fit-content;
+        min-width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    }
+
+    .actionButtonsWrapper {
+      flex: 0 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 80px;
+    }
+  }
+}

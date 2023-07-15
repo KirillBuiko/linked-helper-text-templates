@@ -1,35 +1,40 @@
-import {useRef} from "react";
+import {TemplateTextNode} from "@/classes/TemplateTree";
+import styles from "./ControlTextArea.module.scss"
+import TextareaAutosize from 'react-textarea-autosize';
 
-export default function ControlTextArea(
-    {node, updateTemplateTree, setLastClickedBlock, setLastClickedIndex}:
-        {
-            node: TemplateTextNode,
-            updateTemplateTree: () => void,
-            setLastClickedIndex: (ind: number) => void,
-            setLastClickedBlock: (node: TemplateTextNode) => void,
-        }) {
-    const inputRef = useRef<HTMLInputElement>(null);
-
+type Props = {
+    node: TemplateTextNode,
+    updateTemplateTree: () => void,
+    setLastClickedIndex: (ind: number) => void,
+    setLastClickedBlock: (node: TemplateTextNode) => void,
+    placeholder?: string
+}
+export default function ControlTextArea(props: Props) {
+    const placeHolder = props.placeholder ?? "Write template text with {variables} here";
     function onInput(event: React.FormEvent) {
-        node.text = (event.target as HTMLInputElement).value;
-        updateTemplateTree();
-        onFocus();
+        props.node.text = (event.target as HTMLInputElement).value;
+        props.updateTemplateTree();
+        onFocus(event);
     }
 
-    function onFocus() {
-        if(!(inputRef && inputRef.current && inputRef.current.selectionStart !== null)) return;
-        setLastClickedBlock(node);
-        setLastClickedIndex(inputRef.current.selectionStart);
+    function onFocus(event: React.FormEvent) {
+        const inputElement = event.target as HTMLInputElement;
+        if(inputElement.selectionStart === null) return;
+        console.log(inputElement.selectionStart);
+        props.setLastClickedBlock(props.node);
+        props.setLastClickedIndex(inputElement.selectionStart);
     }
 
     return (
-        <div>
-            <input type="text"
-                   ref={inputRef}
-                   value={node.text}
-                   onInput={onInput}
-                   onFocus={onFocus}
-                   onClick={onFocus}/>
+        <div className={styles.wrapper}>
+            <TextareaAutosize value={props.node.text}
+                              className={styles.textarea}
+                              onInput={onInput}
+                              onFocus={onFocus}
+                              onClick={onFocus}
+                              minRows={1}
+                              maxRows={5}
+                              placeholder={placeHolder}/>
         </div>
     )
 }

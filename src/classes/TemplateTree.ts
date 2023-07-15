@@ -1,9 +1,9 @@
-enum TemplateNodeType {
+export enum TemplateNodeType {
     TEXT_NODE,
     CONDITIONAL_NODE
 }
 
-abstract class TemplateNode {
+export abstract class TemplateNode {
     nextNode: TemplateNode | null;
 
     protected constructor(public type: TemplateNodeType, public text = "") {
@@ -11,35 +11,25 @@ abstract class TemplateNode {
     }
 }
 
-class TemplateTextNode extends TemplateNode {
+export class TemplateTextNode extends TemplateNode {
     constructor(text = "") {
         super(TemplateNodeType.TEXT_NODE, text);
         this.text = text;
     }
-
-    insertConditionalNode(cursor: number = -1, variable: string = "") {
-        const newTextNode = new TemplateTextNode((cursor < this.text.length && cursor > 0) ? this.text.slice(cursor) : "");
-        if (newTextNode.text !== "") {
-            this.text = this.text.slice(0, cursor);
-        }
-        const newConditionalNode = new TemplateConditionalNode(variable);
-        this.nextNode = newConditionalNode;
-        newConditionalNode.nextNode = newTextNode;
-    }
 }
 
-class TemplateConditionalNode extends TemplateNode {
+export class TemplateConditionalNode extends TemplateNode {
     thenNode: TemplateTextNode;
     elseNode: TemplateTextNode;
 
-    constructor(text: string = "") {
-        super(TemplateNodeType.CONDITIONAL_NODE, text);
+    constructor(variable: string = "") {
+        super(TemplateNodeType.CONDITIONAL_NODE, `{${variable}}`);
         this.thenNode = new TemplateTextNode("");
         this.elseNode = new TemplateTextNode("");
     }
 }
 
-class TemplateTree {
+export class TemplateTree {
     arrVarNames: string[];
     rootNode: TemplateTextNode;
 
@@ -83,6 +73,21 @@ class TemplateTree {
                 || this.deleteNode(node, (current as TemplateConditionalNode).nextNode);
         }
         return false;
+    }
+
+    insertConditionalNode(node: TemplateTextNode, cursor: number = -1) {
+        // Create new textNode and conditionalNode
+        const newTextNode =
+            new TemplateTextNode((cursor < node.text.length && cursor >= 0) ? node.text.slice(cursor) : "");
+        if (newTextNode.text !== "") {
+            node.text = node.text.slice(0, cursor);
+        }
+        const newConditionalNode = new TemplateConditionalNode(this.arrVarNames[0]);
+
+        // Linking new nodes like (current -> conditionalNode -> textNode -> currentNext);
+        newTextNode.nextNode = node.nextNode;
+        node.nextNode = newConditionalNode;
+        newConditionalNode.nextNode = newTextNode;
     }
 
     toString() {

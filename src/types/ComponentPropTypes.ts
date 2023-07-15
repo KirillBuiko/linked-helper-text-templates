@@ -1,3 +1,5 @@
+import {TemplateNode, TemplateTextNode} from "@/classes/TemplateTree";
+
 export interface TemplateBlockPropsType {
     currentNode: TemplateNode,
     setLastClickedIndex: (ind: number) => void,

@@ -1,0 +1,19 @@
+.wrapper {
+  width: 100%;
+  min-width: 400px;
+  color: black;
+
+  .textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    padding: 5px;
+    border-radius: 10px;
+    outline: 2px solid rgba(1, 1, 1, 0);
+    transition: outline-color 0.1s;
+
+    &:focus {
+      outline-color: rgb(0, 189, 255);
+    }
+  }
+}

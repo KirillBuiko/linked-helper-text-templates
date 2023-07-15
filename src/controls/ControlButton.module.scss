@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  background: #333;
+  width: 100%;
+  border: 2px solid rgba(255,255,255,0.1);
+  padding: 5px 10px;
+  -webkit-user-select: none;
+  box-sizing: border-box;
+  transition: border-color 0.1s;
+
+  &:hover {
+    border-color: white;
+  }
+
+  &:active {
+    background: #232323;
+  }
+}

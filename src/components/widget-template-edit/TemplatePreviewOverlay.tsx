@@ -1,6 +1,7 @@
 import styles from './TemplatePreviewOverlay.module.scss';
 
-export default function TemplatePreviewOverlay() {
+type Props = {}
+export default function TemplatePreviewOverlay(props: Props) {
     return (
         <div className={styles.wrapper}>
 

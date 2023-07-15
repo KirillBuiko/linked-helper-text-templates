@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.blockRow {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 150px 1fr;
+
+  .blockDescription {
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding-right: 10px;
+  }
+
+  .blockText {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+  }
+}

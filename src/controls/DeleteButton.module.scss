@@ -1,0 +1,9 @@
+.wrapper {
+  cursor: pointer;
+  border: 1px solid transparent;
+  height: fit-content;
+
+  &:hover {
+    border-color: white;
+  }
+}
