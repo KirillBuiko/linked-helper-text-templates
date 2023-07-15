@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './BigWidgetButton.module.scss';
-import ControlButton from "@/controls/ControlButton";
+import ControlButton from "@/components/controls/ControlButton";
 
 type Props = {
     children: React.ReactNode,

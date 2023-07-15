@@ -1,5 +1,5 @@
 import styles from './VariablesItem.module.scss';
-import ControlButton from "@/controls/ControlButton";
+import ControlButton from "@/components/controls/ControlButton";
 
 type Props = {
     variable: string,

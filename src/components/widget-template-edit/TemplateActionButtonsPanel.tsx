@@ -1,5 +1,5 @@
 import styles from './TemplateActionButtonsPanel.module.scss';
-import ControlButton from "@/controls/ControlButton";
+import ControlButton from "@/components/controls/ControlButton";
 
 type Props = {
     onSave: () => void,

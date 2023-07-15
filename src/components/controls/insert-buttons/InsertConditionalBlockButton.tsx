@@ -1,8 +1,8 @@
 import styles from './InsertConditionalBlockButton.module.scss';
-import ControlButton from "@/controls/ControlButton";
-import IfIcon from "@/icons/IfIcon";
-import ThenIcon from "@/icons/ThenIcon";
-import ElseIcon from "@/icons/ElseIcon";
+import ControlButton from "@/components/controls/ControlButton";
+import IfIcon from "@/components/icons/IfIcon";
+import ThenIcon from "@/components/icons/ThenIcon";
+import ElseIcon from "@/components/icons/ElseIcon";
 
 type Props = {onInsertClick: ()=>void}
 export default function InsertConditionalBlockButton(props: Props) {

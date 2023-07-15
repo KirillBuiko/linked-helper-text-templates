@@ -10,6 +10,7 @@
   -webkit-user-select: none;
   box-sizing: border-box;
   transition: border-color 0.1s;
+  overflow: hidden;
 
   &:hover {
     border-color: white;

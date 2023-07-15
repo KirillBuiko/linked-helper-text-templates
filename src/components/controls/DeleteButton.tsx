@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DeleteIcon from "@/icons/DeleteIcon";
+import DeleteIcon from "@/components/icons/DeleteIcon";
 import styles from './DeleteButton.module.scss'
 
 type Props = {

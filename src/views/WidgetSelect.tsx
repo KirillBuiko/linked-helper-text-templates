@@ -4,15 +4,18 @@ import {WidgetName} from "@/types/WidgetsTypes";
 import styles from './WidgetSelect.module.scss';
 import {useState} from "react";
 import WidgetTemplateEdit from "@/components/widget-template-edit/WidgetTemplateEdit";
-import BigWidgetButton from "@/controls/BigWidgetButton";
+import BigWidgetButton from "@/components/controls/BigWidgetButton";
 
-function widgetTemplateEdit() {
+function widgetTemplateEdit(props: { onClose: () => void }) {
     // TODO: create functions for widgetTemplate
     async function save(template: string) {
 
     }
 
-    return (<WidgetTemplateEdit callbackSave={save} arrVarNames={["1", "2", "3"]}/>);
+    return (
+        <WidgetTemplateEdit callbackSave={save}
+                            arrVarNames={["111111111", "2222222222", "3", "44444", "5", "6"]}
+                            onClose={props.onClose}/>);
 }
 
 type Props = {};
@@ -20,8 +23,12 @@ export default function WidgetSelect(props: Props) {
     const [selectedWidget, setSelectedWidget] =
         useState<WidgetName | null>(null);
 
+    function onClose() {
+        setSelectedWidget(null);
+    }
+
     const widgets: { [ind in WidgetName]: React.ReactNode } = {
-        templateEdit: widgetTemplateEdit()
+        templateEdit: widgetTemplateEdit({onClose})
     }
     const buttonsText: { [ind in WidgetName]: React.ReactNode } = {
         templateEdit: "Message template editor"

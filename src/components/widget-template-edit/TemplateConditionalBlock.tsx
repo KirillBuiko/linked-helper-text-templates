@@ -1,12 +1,12 @@
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
 import TemplateRecursiveBlock from "@/components/widget-template-edit/TemplateRecursiveBlock";
-import IfIcon from "@/icons/IfIcon";
-import ElseIcon from "@/icons/ElseIcon";
-import ThenIcon from "@/icons/ThenIcon";
+import IfIcon from "@/components/icons/IfIcon";
+import ElseIcon from "@/components/icons/ElseIcon";
+import ThenIcon from "@/components/icons/ThenIcon";
 import styles from './TemplateConditionalBlock.module.scss';
 import TemplateTextBlock from "@/components/widget-template-edit/TemplateTextBlock";
 import {TemplateConditionalNode} from "@/utils/TemplateTree";
-import DeleteButton from "@/controls/DeleteButton";
+import DeleteButton from "@/components/controls/DeleteButton";
 
 type Props = { props: TemplateBlockPropsType }
 export default function TemplateConditionalBlock({props}: Props) {

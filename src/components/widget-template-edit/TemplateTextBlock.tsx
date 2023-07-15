@@ -1,5 +1,5 @@
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
-import ControlTextArea from "@/controls/ControlTextArea";
+import ControlTextArea from "@/components/controls/ControlTextArea";
 import styles from './TemplateTextBlock.module.scss';
 import {TemplateTextNode} from "@/utils/TemplateTree";
 
