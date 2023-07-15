@@ -3,16 +3,17 @@ import OverlayContainer from "@/components/overlays/OverlayContainer";
 import {parseTemplateMessage} from "@/utils/parseTemplateMessage";
 import {useState} from "react";
 import VariableValueInput from "@/components/controls/VariableValueInput";
-
-type Props = {
-    template: string,
-    arrVarNames: string[],
-    onClose: () => void,
-}
+import {TemplateTree} from "@/utils/TemplateTree";
 
 const colorPalette: string[] = [];
 for (let i = 0; i < 20; i++) {
     colorPalette[i] = `hsl(${(i * 70 + 40) % 360} 100% 50%)`;
+}
+
+type Props = {
+    template: TemplateTree | undefined,
+    arrVarNames: string[],
+    onClose: () => void,
 }
 
 export default function TemplatePreviewOverlay(props: Props) {
@@ -22,14 +23,19 @@ export default function TemplatePreviewOverlay(props: Props) {
             return acc;
         }, {} as Record<string, string>)
     );
-    const parsedArray = parseTemplateMessage(props.arrVarNames, props.template, values);
+    const parsedArray = props.template ? parseTemplateMessage(props.arrVarNames, props.template, values) : [];
 
     const parsedElements = parsedArray ? parsedArray.map((text, ind) => (
-        <span key={ind}
-              className={text[1] !== null ? styles.coloredText : ""}
-              style={{borderColor: text[1] ? colorPalette[props.arrVarNames.indexOf(text[1])] : "black"}}>
-            {text[0]}
-        </span>
+        <>
+            {
+                text[0] &&
+                <span key={ind}
+                      className={text[1] !== null ? styles.coloredText : ""}
+                      style={{borderColor: text[1] ? colorPalette[props.arrVarNames.indexOf(text[1])] : "black"}}>
+                    {text[0]}
+                </span>
+            }
+        </>
     )) : "";
 
     function onSetValue(key: string, value: string) {
@@ -47,7 +53,7 @@ export default function TemplatePreviewOverlay(props: Props) {
     ));
 
     return (
-        <OverlayContainer isShown={props.template !== ""}>
+        <OverlayContainer isShown={!!props.template}>
             <div className={styles.wrapper}>
                 <header className={styles.header}>
                     <div className={styles.title}>Message Preview</div>

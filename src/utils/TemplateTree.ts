@@ -22,8 +22,8 @@ export class TemplateConditionalNode extends TemplateNode {
     thenNode: TemplateTextNode;
     elseNode: TemplateTextNode;
 
-    constructor(variable: string = "") {
-        super(TemplateNodeType.CONDITIONAL_NODE, `{${variable}}`);
+    constructor() {
+        super(TemplateNodeType.CONDITIONAL_NODE, "");
         this.thenNode = new TemplateTextNode("");
         this.elseNode = new TemplateTextNode("");
     }
@@ -32,14 +32,13 @@ export class TemplateConditionalNode extends TemplateNode {
 export class TemplateTree {
     rootNode: TemplateTextNode;
 
-    constructor(public arrVarNames: string[], template?: string) {
+    constructor(template?: TemplateTree) {
         this.rootNode = new TemplateTextNode("Hello!");
 
-        if (template !== undefined) {
+        if (template) {
             const lastRootNode = this.rootNode;
-            const lastArrVarNames = this.arrVarNames;
-            Object.assign(this, JSON.parse(template));
-            if(lastRootNode === this.rootNode || lastArrVarNames === this.arrVarNames) {
+            Object.assign(this, template);
+            if(lastRootNode === this.rootNode) {
                 throw new Error("Template is invalid");
             }
         } else {
@@ -48,7 +47,7 @@ export class TemplateTree {
     }
 
     initDefaultTree() {
-        this.rootNode.nextNode = new TemplateConditionalNode(this.arrVarNames[0] || "");
+        this.rootNode.nextNode = new TemplateConditionalNode();
         this.rootNode.nextNode.nextNode = new TemplateTextNode("Bye!");
     }
 
@@ -81,7 +80,7 @@ export class TemplateTree {
         if (newTextNode.text !== "") {
             node.text = node.text.slice(0, cursor);
         }
-        const newConditionalNode = new TemplateConditionalNode(this.arrVarNames[0] ?? "");
+        const newConditionalNode = new TemplateConditionalNode();
 
         // Linking new nodes like (current -> conditionalNode -> textNode -> currentNext);
         newTextNode.nextNode = node.nextNode;

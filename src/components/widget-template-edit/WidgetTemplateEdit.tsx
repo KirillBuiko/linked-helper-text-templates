@@ -5,28 +5,26 @@ import TemplateActionButtonsPanel from "@/components/widget-template-edit/Templa
 import {type TemplateNode, TemplateNodeType, type TemplateTextNode, TemplateTree} from "@/utils/TemplateTree"
 import {useState} from "react";
 import styles from "./WidgetTemplateEdit.module.scss";
-import ControlButton from "@/components/controls/ControlButton";
 import {getTextFromArray, parseTemplateMessage} from "@/utils/parseTemplateMessage";
 import TemplatePreviewOverlay from "@/components/widget-template-edit/TemplatePreviewOverlay";
 
 type Props = {
-    callbackSave: (template: string) => Promise<void>,
+    callbackSave: (arrVarNames: string[], template: TemplateTree) => Promise<void>,
     arrVarNames: string[],
-    template?: string,
+    template?: TemplateTree,
     onClose: ()=>void
 };
 export default function WidgetTemplateEdit(props: Props) {
-
     const [templateTree, setTemplateTree] =
         useState(() => {
             let templateTree: TemplateTree;
             try {
-                templateTree = new TemplateTree(props.arrVarNames, props.template);
+                templateTree = new TemplateTree(props.template);
             } catch (e) {
                 if (e instanceof Error) {
                     alert(e.message);
                 }
-                templateTree = new TemplateTree(props.arrVarNames);
+                templateTree = new TemplateTree();
             }
             return templateTree;
         });
@@ -35,11 +33,11 @@ export default function WidgetTemplateEdit(props: Props) {
     const [lastClickedIndex, setLastClickedIndex] =
         useState(0);
     const [previewTemplate, setPreviewTemplate] =
-        useState("");
+        useState<TemplateTree | undefined>(undefined);
 
     function updateTemplateTree() {
         // Make shallow copy of tree and set
-        const newTree = Object.assign(new TemplateTree([]), templateTree);
+        const newTree = Object.assign(new TemplateTree(), templateTree);
         setTemplateTree(newTree);
     }
 
@@ -65,37 +63,34 @@ export default function WidgetTemplateEdit(props: Props) {
     }
 
     function onSave() {
-        props.callbackSave(templateTree.toString());
+        props.callbackSave(props.arrVarNames, templateTree).then(() => {
+            alert("Save completed");
+        });
     }
 
     function onClose() {
-        props.onClose()
+        props.onClose();
+        const result = confirm("Do you want to save template?");
+        if (result) {
+            onSave();
+        }
         // TODO: ask user about save
     }
 
     function onPreview() {
         // TODO: show preview (add component to render)
-        setPreviewTemplate(templateTree.toString());
-    }
-
-    function updateView() {
-        const tree = templateTree.toString();
-        const newTree = new TemplateTree(['1', '2', '3']);
-        newTree.deleteNode(newTree.rootNode.nextNode);
-        setTemplateTree(newTree);
-        setTimeout(() => setTemplateTree(new TemplateTree([], tree)), 0);
+        setPreviewTemplate(JSON.parse(templateTree.toString()));
     }
 
     function onPreviewClose() {
-        setPreviewTemplate("");
+        setPreviewTemplate(undefined);
     }
 
     function testTemplate() {
-        const template = templateTree.toString();
         const values = {
             1: "Max1", 2: "Baby2", 3: "Nicolas3"
         }
-        const parsed = parseTemplateMessage(props.arrVarNames, template, values);
+        const parsed = parseTemplateMessage(props.arrVarNames, templateTree, values);
         if (parsed)
             alert(getTextFromArray(parsed));
     }
@@ -107,8 +102,6 @@ export default function WidgetTemplateEdit(props: Props) {
                                     onClose={onPreviewClose}/>
             <div className={styles.insertPanelWrapper}>
                 <InsertConditionalBlockButton onInsertClick={insertConditionalBlock}/>
-                <ControlButton onClick={updateView}>Update</ControlButton>
-                <ControlButton onClick={testTemplate}>Test</ControlButton>
             </div>
             <div className={styles.mainWrapper}>
                 <h1 className={styles.widgetHeader}>Message Template Editor</h1>
@@ -120,7 +113,7 @@ export default function WidgetTemplateEdit(props: Props) {
                     <div className={styles.templateBlocks}>
                         <TemplateRecursiveBlock props={{
                             currentNode: templateTree.rootNode,
-                            arrVarNames: templateTree.arrVarNames,
+                            arrVarNames: props.arrVarNames,
                             setLastClickedBlock,
                             setLastClickedIndex,
                             updateTemplateTree,

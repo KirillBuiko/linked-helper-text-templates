@@ -5,17 +5,29 @@ import styles from './WidgetSelect.module.scss';
 import {useState} from "react";
 import WidgetTemplateEdit from "@/components/widget-template-edit/WidgetTemplateEdit";
 import BigWidgetButton from "@/components/controls/BigWidgetButton";
+import {TemplateTree} from "@/utils/TemplateTree";
 
 function widgetTemplateEdit(props: { onClose: () => void }) {
-    // TODO: create functions for widgetTemplate
-    async function save(template: string) {
+    const arrVarNames =
+        localStorage.arrVarNames
+            ? JSON.parse(localStorage.arrVarNames)
+            : ["firstname", "lastname", "company", "position"];
+    const template =
+        localStorage.template
+            ? JSON.parse(localStorage.template)
+            : null;
 
+    async function save(arrVarNames: string[], template: TemplateTree) {
+        localStorage.setItem("arrVarNames", JSON.stringify(arrVarNames));
+        localStorage.setItem("template", JSON.stringify(template));
     }
 
     return (
-        <WidgetTemplateEdit callbackSave={save}
-                            arrVarNames={["111111111", "2222222222", "3", "44444", "5", "6"]}
-                            onClose={props.onClose}/>);
+        <WidgetTemplateEdit arrVarNames={arrVarNames}
+                            template={template}
+                            callbackSave={save}
+                            onClose={props.onClose}/>
+    );
 }
 
 type Props = {};

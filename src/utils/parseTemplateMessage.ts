@@ -3,11 +3,11 @@ import {TemplateConditionalNode, TemplateNode, TemplateNodeType, TemplateTree} f
 type VarValuesType = { [ind: string]: string };
 type TextWithKeyType = [string, string | null];
 
-export function parseTemplateMessage(arrVarNames: string[], template: string,
+export function parseTemplateMessage(arrVarNames: string[], template: TemplateTree,
                                      varValues: VarValuesType): TextWithKeyType[] | undefined {
     let templateTree: TemplateTree;
     try {
-        templateTree = new TemplateTree(arrVarNames, template);
+        templateTree = new TemplateTree(template);
     } catch (e) {
         return undefined;
     }
