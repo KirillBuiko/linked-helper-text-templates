@@ -5,7 +5,7 @@ import ElseIcon from "@/icons/ElseIcon";
 import ThenIcon from "@/icons/ThenIcon";
 import styles from './TemplateConditionalBlock.module.scss';
 import TemplateTextBlock from "@/components/widget-template-edit/TemplateTextBlock";
-import {TemplateConditionalNode} from "@/classes/TemplateTree";
+import {TemplateConditionalNode} from "@/utils/TemplateTree";
 import DeleteButton from "@/controls/DeleteButton";
 
 type Props = { props: TemplateBlockPropsType }

@@ -2,7 +2,7 @@ import TemplateConditionalBlock from "@/components/widget-template-edit/Template
 import TemplateTextBlock from "@/components/widget-template-edit/TemplateTextBlock";
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
 import styles from './TemplateRecursiveBlock.module.scss';
-import {TemplateNodeType} from "@/classes/TemplateTree";
+import {TemplateNodeType} from "@/utils/TemplateTree";
 import {useEffect, useState} from "react";
 
 type Props = { props: TemplateBlockPropsType }

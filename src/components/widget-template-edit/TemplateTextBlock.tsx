@@ -1,7 +1,7 @@
 import {TemplateBlockPropsType} from "@/types/ComponentPropTypes";
 import ControlTextArea from "@/controls/ControlTextArea";
 import styles from './TemplateTextBlock.module.scss';
-import {TemplateTextNode} from "@/classes/TemplateTree";
+import {TemplateTextNode} from "@/utils/TemplateTree";
 
 type Props = {props: TemplateBlockPropsType & {placeholder?: string}}
 export default function TemplateTextBlock({props}: Props) {

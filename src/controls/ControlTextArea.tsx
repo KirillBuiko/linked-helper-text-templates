@@ -1,4 +1,4 @@
-import {TemplateTextNode} from "@/classes/TemplateTree";
+import {TemplateTextNode} from "@/utils/TemplateTree";
 import styles from "./ControlTextArea.module.scss"
 import TextareaAutosize from 'react-textarea-autosize';
 

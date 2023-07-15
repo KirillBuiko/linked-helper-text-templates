@@ -30,21 +30,20 @@ export class TemplateConditionalNode extends TemplateNode {
 }
 
 export class TemplateTree {
-    arrVarNames: string[];
     rootNode: TemplateTextNode;
 
-    constructor(arrVarNames: string[]);
-    constructor(template: string);
-    constructor(arg: string[] | string);
-    constructor(arg: string[] | string) {
+    constructor(public arrVarNames: string[], template?: string) {
         this.rootNode = new TemplateTextNode("Hello!");
-        this.arrVarNames = [];
 
-        if (typeof arg === "object") {
-            this.arrVarNames = arg;
-            this.initDefaultTree();
+        if (template !== undefined) {
+            const lastRootNode = this.rootNode;
+            const lastArrVarNames = this.arrVarNames;
+            Object.assign(this, JSON.parse(template));
+            if(lastRootNode === this.rootNode || lastArrVarNames === this.arrVarNames) {
+                throw new Error("Template is invalid");
+            }
         } else {
-            Object.assign(this, JSON.parse(arg));
+            this.initDefaultTree();
         }
     }
 

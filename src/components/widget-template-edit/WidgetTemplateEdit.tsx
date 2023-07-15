@@ -2,10 +2,11 @@ import VariablesBlock from "@/components/widget-template-edit/VariablesBlock";
 import InsertConditionalBlockButton from "@/controls/insert-buttons/InsertConditionalBlockButton";
 import TemplateRecursiveBlock from "@/components/widget-template-edit/TemplateRecursiveBlock";
 import TemplateActionButtonsPanel from "@/components/widget-template-edit/TemplateActionButtonsPanel";
-import {type TemplateNode, TemplateNodeType, type TemplateTextNode, TemplateTree} from "@/classes/TemplateTree"
+import {type TemplateNode, TemplateNodeType, type TemplateTextNode, TemplateTree} from "@/utils/TemplateTree"
 import {useState} from "react";
 import styles from "./WidgetTemplateEdit.module.scss";
 import ControlButton from "@/controls/ControlButton";
+import {getTextFromArray, parseTemplateMessage} from "@/utils/parseTemplateMessage";
 
 type Props = {
     callbackSave: (template: string) => Promise<void>,
@@ -13,8 +14,20 @@ type Props = {
     template?: string
 };
 export default function WidgetTemplateEdit({callbackSave, arrVarNames, template}: Props) {
+
     const [templateTree, setTemplateTree] =
-        useState(new TemplateTree(template ?? arrVarNames));
+        useState(() => {
+            let templateTree: TemplateTree;
+            try {
+                templateTree = new TemplateTree(arrVarNames, template);
+            } catch(e) {
+                if(e instanceof Error) {
+                    alert(e.message);
+                }
+                templateTree = new TemplateTree(arrVarNames);
+            }
+            return templateTree;
+        });
     const [lastClickedBlock, setLastClickedBlock] =
         useState<TemplateTextNode>(templateTree.rootNode);
     const [lastClickedIndex, setLastClickedIndex] =
@@ -64,7 +77,17 @@ export default function WidgetTemplateEdit({callbackSave, arrVarNames, template}
         const newTree = new TemplateTree(['1','2','3']);
         newTree.deleteNode(newTree.rootNode.nextNode);
         setTemplateTree(newTree);
-        setTimeout(()=>setTemplateTree(new TemplateTree(tree)), 1000);
+        setTimeout(()=>setTemplateTree(new TemplateTree([], tree)), 0);
+    }
+
+    function testTemplate() {
+        const template = templateTree.toString();
+        const values = {
+            1: "Max1", 2: "Baby2", 3: "Nicolas3"
+        }
+        const parsed = parseTemplateMessage(arrVarNames, template, values);
+        if (parsed)
+            alert(getTextFromArray(parsed));
     }
 
     return (
@@ -72,6 +95,7 @@ export default function WidgetTemplateEdit({callbackSave, arrVarNames, template}
             <div className={styles.insertPanelWrapper}>
                 <InsertConditionalBlockButton onInsertClick={insertConditionalBlock}/>
                 <ControlButton onClick={updateView}>Update</ControlButton>
+                <ControlButton onClick={testTemplate}>Test</ControlButton>
             </div>
             <div className={styles.mainWrapper}>
                 <h1 className={styles.widgetHeader}>Message Template Editor</h1>

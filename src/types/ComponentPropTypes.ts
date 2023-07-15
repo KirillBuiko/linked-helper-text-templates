@@ -1,4 +1,4 @@
-import {TemplateNode, TemplateTextNode} from "@/classes/TemplateTree";
+import {TemplateNode, TemplateTextNode} from "@/utils/TemplateTree";
 
 export interface TemplateBlockPropsType {
     currentNode: TemplateNode,

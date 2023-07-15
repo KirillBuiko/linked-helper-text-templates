@@ -37,7 +37,6 @@ export default function WidgetSelect(props: Props) {
         </div>
     )
 
-
     return (
         <div className={styles.wrapper}>
             {selectedWidget ? widgets[selectedWidget] : widgetsButtonsList}
