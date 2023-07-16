@@ -5,7 +5,6 @@ import TemplateActionButtonsPanel from "@/components/widget-template-edit/Templa
 import {type TemplateNode, TemplateNodeType, type TemplateTextNode, TemplateTree} from "@/utils/TemplateTree"
 import {useState} from "react";
 import styles from "./WidgetTemplateEdit.module.scss";
-import {getTextFromArray, parseTemplateMessage} from "@/utils/parseTemplateMessage";
 import TemplatePreviewOverlay from "@/components/widget-template-edit/TemplatePreviewOverlay";
 
 type Props = {
@@ -19,12 +18,12 @@ export default function WidgetTemplateEdit(props: Props) {
         useState(() => {
             let templateTree: TemplateTree;
             try {
-                templateTree = new TemplateTree(props.template);
+                templateTree = new TemplateTree(props.arrVarNames, props.template);
             } catch (e) {
                 if (e instanceof Error) {
                     alert(e.message);
                 }
-                templateTree = new TemplateTree();
+                templateTree = new TemplateTree(props.arrVarNames);
             }
             return templateTree;
         });
@@ -37,7 +36,7 @@ export default function WidgetTemplateEdit(props: Props) {
 
     function updateTemplateTree() {
         // Make shallow copy of tree and set
-        const newTree = Object.assign(new TemplateTree(), templateTree);
+        const newTree = Object.assign(new TemplateTree(props.arrVarNames), templateTree);
         setTemplateTree(newTree);
     }
 
@@ -84,15 +83,6 @@ export default function WidgetTemplateEdit(props: Props) {
 
     function onPreviewClose() {
         setPreviewTemplate(undefined);
-    }
-
-    function testTemplate() {
-        const values = {
-            1: "Max1", 2: "Baby2", 3: "Nicolas3"
-        }
-        const parsed = parseTemplateMessage(props.arrVarNames, templateTree, values);
-        if (parsed)
-            alert(getTextFromArray(parsed));
     }
 
     return (

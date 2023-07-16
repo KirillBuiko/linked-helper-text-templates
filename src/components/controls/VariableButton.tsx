@@ -8,7 +8,7 @@ type Props = {
 export default function VariableButton(props: Props) {
     return (
         <div className={styles.wrapper}>
-            <ControlButton onClick={props.onVariableClick}>{props.variable}</ControlButton>
+            <ControlButton onClick={props.onVariableClick}>{`{${props.variable}}`}</ControlButton>
         </div>
     );
 }

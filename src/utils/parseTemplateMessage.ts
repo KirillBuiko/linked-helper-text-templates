@@ -3,18 +3,18 @@ import {TemplateConditionalNode, TemplateNode, TemplateNodeType, TemplateTree} f
 type VarValuesType = { [ind: string]: string };
 type TextWithKeyType = [string, string | null];
 
-export function parseTemplateMessage(arrVarNames: string[], template: TemplateTree,
+export function parseTemplateMessage(template: TemplateTree,
                                      varValues: VarValuesType): TextWithKeyType[] | undefined {
     let templateTree: TemplateTree;
     try {
-        templateTree = new TemplateTree(template);
+        templateTree = new TemplateTree(template.arrVarNames, template);
     } catch (e) {
         return undefined;
     }
-    return parseNode(templateTree.rootNode, varValues);
+    return parseNode(templateTree.rootNode, varValues, template.arrVarNames);
 }
 
-function parseNode(node: TemplateNode | null, varValues: VarValuesType): TextWithKeyType[] {
+function parseNode(node: TemplateNode | null, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType[] {
     if (!node) return [];
     let resultArray: TextWithKeyType[] = [];
     let arrayToPush: TextWithKeyType[] = [];
@@ -22,13 +22,13 @@ function parseNode(node: TemplateNode | null, varValues: VarValuesType): TextWit
     // recursively process all nodes and join result arrays
     switch (node.type) {
         case TemplateNodeType.TEXT_NODE:
-            arrayToPush = getProcessedArray(node.text, varValues);
+            arrayToPush = getProcessedArray(node.text, varValues, arrVarNames);
             break;
         case TemplateNodeType.CONDITIONAL_NODE:
-            if (getTextFromArray(getProcessedArray(node.text, varValues)) !== "") {
-                arrayToPush = parseNode((node as TemplateConditionalNode).thenNode, varValues);
+            if (getTextFromArray(getProcessedArray(node.text, varValues, arrVarNames)) !== "") {
+                arrayToPush = parseNode((node as TemplateConditionalNode).thenNode, varValues, arrVarNames);
             } else {
-                arrayToPush = parseNode((node as TemplateConditionalNode).elseNode, varValues);
+                arrayToPush = parseNode((node as TemplateConditionalNode).elseNode, varValues, arrVarNames);
             }
             break;
     }
@@ -36,12 +36,12 @@ function parseNode(node: TemplateNode | null, varValues: VarValuesType): TextWit
         [
             ...resultArray,
             ...arrayToPush,
-            ...parseNode(node.nextNode, varValues)
+            ...parseNode(node.nextNode, varValues, arrVarNames)
         ]
     return resultArray;
 }
 
-function getProcessedArray(text: string, varValues: VarValuesType): TextWithKeyType[] {
+function getProcessedArray(text: string, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType[] {
     let braceIndex = -1;
     let afterBraceIndex = 0;
     let resultArray: TextWithKeyType[] = [];
@@ -49,14 +49,14 @@ function getProcessedArray(text: string, varValues: VarValuesType): TextWithKeyT
         const char = text[i];
 
         // looking for {var} in text, save open brace index, check var when braces are closed,
-        // join last text and var value
+        // push join last text and var value to resultArray
         if ((char === "{") && (braceIndex === -1)) {
             braceIndex = i;
         } else if ((char === "}") && (braceIndex !== -1)) {
             resultArray = [
                 ...resultArray,
                 [text.slice(afterBraceIndex, braceIndex), null],
-                getValueTuple(text.slice(braceIndex + 1, i), varValues)
+                getProcessedTuple(text.slice(braceIndex + 1, i), varValues, arrVarNames)
             ]
             afterBraceIndex = i + 1;
             braceIndex = -1;
@@ -71,8 +71,17 @@ function getProcessedArray(text: string, varValues: VarValuesType): TextWithKeyT
     return resultArray;
 }
 
-function getValueTuple(key: string, varValues: VarValuesType): TextWithKeyType {
-    return (key in varValues) ? [varValues[key], key] : ["", null];
+function getProcessedTuple(key: string, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType {
+    // If key there is in arrVarNames and values - return its value
+    // If key there is not in arrVarNames - interpret as text
+    // If key there is not in value - return empty text
+    if (arrVarNames.includes(key)) {
+        if (key in varValues) {
+            return [varValues[key], key];
+        }
+        return ["", null];
+    }
+    return [`{${key}}`, null];
 }
 
 export function getTextFromArray(array: TextWithKeyType[]): string {

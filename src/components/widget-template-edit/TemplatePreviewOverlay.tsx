@@ -23,7 +23,7 @@ export default function TemplatePreviewOverlay(props: Props) {
             return acc;
         }, {} as Record<string, string>)
     );
-    const parsedArray = props.template ? parseTemplateMessage(props.arrVarNames, props.template, values) : [];
+    const parsedArray = props.template ? parseTemplateMessage(props.template, values) : [];
 
     const parsedElements = parsedArray ? parsedArray.map((text, ind) => (
         <>

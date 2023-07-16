@@ -1,13 +1,20 @@
 .wrapper {
+  display: flex;
+  flex-direction: column;
   flex: 1 0 150px;
   font-size: 15px;
   border-width: 2px;
   border-radius: 8px;
+  padding: 0 5px 5px 5px;
   overflow: hidden;
+
+  .variableTitle {
+    color: #777;
+    font-size: 12px;
+  }
 
   .variableInput {
     width: 100%;
     outline: none;
-    padding: 5px 5px 5px 10px;
   }
 }

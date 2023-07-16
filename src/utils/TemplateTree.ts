@@ -32,13 +32,13 @@ export class TemplateConditionalNode extends TemplateNode {
 export class TemplateTree {
     rootNode: TemplateTextNode;
 
-    constructor(template?: TemplateTree) {
+    constructor(public arrVarNames: string[], template?: TemplateTree) {
         this.rootNode = new TemplateTextNode("Hello!");
 
         if (template) {
-            const lastRootNode = this.rootNode;
-            Object.assign(this, template);
-            if(lastRootNode === this.rootNode) {
+            if(template.rootNode) {
+                this.rootNode = template.rootNode;
+            } else {
                 throw new Error("Template is invalid");
             }
         } else {

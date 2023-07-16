@@ -9,8 +9,9 @@ type Props = {
 export default function VariableValueInput(props: Props) {
     return (
         <div className={styles.wrapper} style={{borderColor: props.color}}>
+            <div className={styles.variableTitle}>{props.variable}</div>
             <input className={styles.variableInput}
-                   placeholder={props.variable}
+                   placeholder={'Value'}
                    onChange={(e) => props.onChange(e.target.value)}/>
         </div>
     );
