@@ -1,8 +1,16 @@
 import {TemplateConditionalNode, TemplateNode, TemplateNodeType, TemplateTree} from "@/utils/TemplateTree";
 
 type VarValuesType = { [ind: string]: string };
-type TextWithKeyType = [string, string | null];
+export type TextWithKeyType = [string, string | null];
 
+/** Convert tuples array to plain text */
+export function parsedArrayToText(array: TextWithKeyType[]): string {
+    return array.reduce((acc, current) => {
+        return acc + current[0];
+    }, "")
+}
+
+/** Parse template text to array like [text, varKey | null][] */
 export function parseTemplateMessage(template: TemplateTree,
                                      varValues: VarValuesType): TextWithKeyType[] | undefined {
     let templateTree: TemplateTree;
@@ -11,24 +19,25 @@ export function parseTemplateMessage(template: TemplateTree,
     } catch (e) {
         return undefined;
     }
-    return parseNode(templateTree.rootNode, varValues, template.arrVarNames);
+    return parseNodes(templateTree.rootNode, varValues, template.arrVarNames);
 }
 
-function parseNode(node: TemplateNode | null, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType[] {
+/** Recursively parse node texts to array like [text, varKey | null][] */
+function parseNodes(node: TemplateNode | null, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType[] {
     if (!node) return [];
     let resultArray: TextWithKeyType[] = [];
     let arrayToPush: TextWithKeyType[] = [];
 
-    // recursively process all nodes and join result arrays
+    // recursively process all nodes and push to result array
     switch (node.type) {
         case TemplateNodeType.TEXT_NODE:
-            arrayToPush = getProcessedArray(node.text, varValues, arrVarNames);
+            arrayToPush = parseText(node.text, varValues, arrVarNames);
             break;
         case TemplateNodeType.CONDITIONAL_NODE:
-            if (getTextFromArray(getProcessedArray(node.text, varValues, arrVarNames)) !== "") {
-                arrayToPush = parseNode((node as TemplateConditionalNode).thenNode, varValues, arrVarNames);
+            if (parsedArrayToText(parseText(node.text, varValues, arrVarNames)) !== "") {
+                arrayToPush = parseNodes((node as TemplateConditionalNode).thenNode, varValues, arrVarNames);
             } else {
-                arrayToPush = parseNode((node as TemplateConditionalNode).elseNode, varValues, arrVarNames);
+                arrayToPush = parseNodes((node as TemplateConditionalNode).elseNode, varValues, arrVarNames);
             }
             break;
     }
@@ -36,12 +45,13 @@ function parseNode(node: TemplateNode | null, varValues: VarValuesType, arrVarNa
         [
             ...resultArray,
             ...arrayToPush,
-            ...parseNode(node.nextNode, varValues, arrVarNames)
+            ...parseNodes(node.nextNode, varValues, arrVarNames)
         ]
     return resultArray;
 }
 
-function getProcessedArray(text: string, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType[] {
+/** Parse node text to array like [text, varKey | null][] */
+function parseText(text: string, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType[] {
     let braceIndex = -1;
     let afterBraceIndex = 0;
     let resultArray: TextWithKeyType[] = [];
@@ -49,7 +59,7 @@ function getProcessedArray(text: string, varValues: VarValuesType, arrVarNames: 
         const char = text[i];
 
         // looking for {var} in text, save open brace index, check var when braces are closed,
-        // push join last text and var value to resultArray
+        // push last text and var value tuples to resultArray
         if ((char === "{") && (braceIndex === -1)) {
             braceIndex = i;
         } else if ((char === "}") && (braceIndex !== -1)) {
@@ -62,6 +72,8 @@ function getProcessedArray(text: string, varValues: VarValuesType, arrVarNames: 
             braceIndex = -1;
         }
     }
+
+    // push remaining text to resultArray
     if (afterBraceIndex < text.length) {
         resultArray = [
             ...resultArray,
@@ -71,10 +83,11 @@ function getProcessedArray(text: string, varValues: VarValuesType, arrVarNames: 
     return resultArray;
 }
 
+/** Parse "{variable}" to tuple like [text, varKey | null] */
 function getProcessedTuple(key: string, varValues: VarValuesType, arrVarNames: string[]): TextWithKeyType {
     // If key there is in arrVarNames and values - return its value
-    // If key there is not in arrVarNames - interpret as text
-    // If key there is not in value - return empty text
+    // If key there isn't in arrVarNames - interpret as text
+    // If key there isn't in valuesArray - return empty text
     if (arrVarNames.includes(key)) {
         if (key in varValues) {
             return [varValues[key], key];
@@ -82,10 +95,4 @@ function getProcessedTuple(key: string, varValues: VarValuesType, arrVarNames: s
         return ["", null];
     }
     return [`{${key}}`, null];
-}
-
-export function getTextFromArray(array: TextWithKeyType[]): string {
-    return array.reduce((acc, current) => {
-        return acc + current[0];
-    }, "")
 }
