@@ -90,7 +90,7 @@ export default function WidgetTemplateEdit(props: Props) {
 
     /** Open preview with copy of template tree */
     function onPreview() {
-        setPreviewTemplate(JSON.parse(templateTree.toString()));
+        setPreviewTemplate(JSON.parse(JSON.stringify(templateTree)));
     }
 
     /** Close preview */

@@ -1,6 +1,6 @@
 import {expect, test,} from '@jest/globals';
 import {TemplateTree} from "@/utils/TemplateTree"
-import {parsedArrayToText, parseTemplateMessage, TextWithKeyType} from "../utils/parseTemplateMessage";
+import {parseTemplateMessage} from "../utils/parseTemplateMessage";
 import {prepareTree, prepareTree2} from "./trees";
 
 test('tree test, create if node', () => {
@@ -28,28 +28,28 @@ test('parse test, parse return not undefined', () => {
 
 test('parse test, all vars defined', () => {
     const tree = prepareTree();
-    const parsedArray = parseTemplateMessage(tree, {
+    const parsedText = parseTemplateMessage(tree, {
         var1: "text1",
         var2: "text2",
         var3: "text3"
-    }) as TextWithKeyType[];
+    });
 
-    expect(parsedArrayToText(parsedArray)).toBe("Start text text1 End text");
+    expect(parsedText).toBe("Start text text1 End text");
 });
 
 test("parse test, var1 undefined, var4 not in array", () => {
     const tree = prepareTree2();
-    const parsedArray = parseTemplateMessage(tree, {
+    const parsedText = parseTemplateMessage(tree, {
         var2: "text2",
         var3: "text3",
         var4: "text4"
-    }) as TextWithKeyType[];
+    });
 
-    expect(parsedArrayToText(parsedArray)).toBe("Start text text2{var4} End text");
+    expect(parsedText).toBe("Start text text2{var4} End text");
 });
 
 test("parse test, invalid template", () => {
-    const parsedArray = parseTemplateMessage(JSON.parse("{}"), {}) as TextWithKeyType[];
+    const parsedText = parseTemplateMessage(JSON.parse("{}"), {});
 
-    expect(parsedArray).toBeUndefined();
+    expect(parsedText).toBeUndefined();
 });

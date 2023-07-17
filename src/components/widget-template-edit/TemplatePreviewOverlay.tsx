@@ -25,8 +25,8 @@ export default function TemplatePreviewOverlay(props: Props) {
         }, {} as Record<string, string>)
     );
 
-    // Trying to parse template and values to text array
-    const parsedArray = props.template ? parseTemplateMessage(props.template, values) : [];
+    // Trying to parse template and values to text
+    const parsedText = props.template ? parseTemplateMessage(props.template, values) : [];
 
     function onSetValue(key: string, value: string) {
         if (key in values) {
@@ -34,20 +34,6 @@ export default function TemplatePreviewOverlay(props: Props) {
         }
         setValues(Object.assign({}, values));
     }
-
-    // Map array to plain or colored text
-    const parsedElements = parsedArray ? parsedArray.map((text, ind) => (
-        <>
-            {
-                text[0] &&
-                <span key={ind}
-                      className={text[1] !== null ? styles.coloredText : ""}
-                      style={{borderColor: text[1] ? colorPalette[props.arrVarNames.indexOf(text[1])] : "black"}}>
-                    {text[0]}
-                </span>
-            }
-        </>
-    )) : "";
 
     // Map var names to inputs
     const variableInputs = props.arrVarNames.map((v, ind) => (
@@ -67,7 +53,7 @@ export default function TemplatePreviewOverlay(props: Props) {
                     </div>
                 </header>
                 <div className={styles.previewText}>
-                    {parsedElements}
+                    {parsedText}
                 </div>
                 <div className={styles.variableInputsWrapper}>
                     Variables: {variableInputs}
