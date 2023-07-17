@@ -21,11 +21,7 @@ test("tree test, invalid template", () => {
 
 test('parse test, parse return not undefined', () => {
     const tree = prepareTree();
-    const parsedArray = parseTemplateMessage(tree, {
-        var1: "text1",
-        var2: "text2",
-        var3: "text3"
-    });
+    const parsedArray = parseTemplateMessage(tree, {});
 
     expect(parsedArray).not.toBeUndefined();
 });
@@ -53,11 +49,7 @@ test("parse test, var1 undefined, var4 not in array", () => {
 });
 
 test("parse test, invalid template", () => {
-    const parsedArray = parseTemplateMessage(JSON.parse("{}"), {
-        var2: "text2",
-        var3: "text3",
-        var4: "text4"
-    }) as TextWithKeyType[];
+    const parsedArray = parseTemplateMessage(JSON.parse("{}"), {}) as TextWithKeyType[];
 
     expect(parsedArray).toBeUndefined();
 });
