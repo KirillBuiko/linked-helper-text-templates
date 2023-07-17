@@ -7,7 +7,7 @@ export enum TemplateNodeType {
 export class TemplateTree {
     rootNode: TemplateTextNode;
 
-    constructor(public arrVarNames: string[], template?: TemplateTree) {
+    constructor(public arrVarNames: string[], template?: TemplateTree | null) {
         this.rootNode = new TemplateTextNode("Hello!");
 
         if (template) {

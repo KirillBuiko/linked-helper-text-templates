@@ -10,7 +10,7 @@ import TemplatePreviewOverlay from "@/components/widget-template-edit/TemplatePr
 type Props = {
     callbackSave: (arrVarNames: string[], template: TemplateTree) => Promise<void>,
     arrVarNames: string[],
-    template?: TemplateTree,
+    template?: TemplateTree | null,
     onClose: () => void
 };
 export default function WidgetTemplateEdit(props: Props) {

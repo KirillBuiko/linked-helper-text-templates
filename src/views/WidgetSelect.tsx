@@ -2,20 +2,28 @@
 import * as React from 'react';
 import {WidgetName} from "@/types/WidgetsTypes";
 import styles from './WidgetSelect.module.scss';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import WidgetTemplateEdit from "@/components/widget-template-edit/WidgetTemplateEdit";
 import BigWidgetButton from "@/components/controls/BigWidgetButton";
 import {TemplateTree} from "@/utils/TemplateTree";
 
-function widgetTemplateEdit(props: { onClose: () => void }) {
-    const arrVarNames =
-        localStorage.arrVarNames
-            ? JSON.parse(localStorage.arrVarNames)
-            : ["firstname", "lastname", "company", "position"];
-    const template =
-        localStorage.template
+function WidgetTemplateEditWrapper(props: { onClose: () => void }) {
+    const [arrVarNames, setArrVarNames] =
+        useState(["firstname", "lastname", "company", "position"]);
+
+    const [template, setTemplate] =
+        useState<TemplateTree | null>(null);
+
+    useEffect(() => {
+        setTemplate(localStorage.template
             ? JSON.parse(localStorage.template)
-            : null;
+            : null);
+
+        setArrVarNames(localStorage.arrVarNames
+            ? JSON.parse(localStorage.arrVarNames)
+            : ["firstname", "lastname", "company", "position"]
+        );
+    }, [setTemplate, setArrVarNames]);
 
     async function save(arrVarNames: string[], template: TemplateTree) {
         localStorage.setItem("arrVarNames", JSON.stringify(arrVarNames));
@@ -30,8 +38,7 @@ function widgetTemplateEdit(props: { onClose: () => void }) {
     );
 }
 
-type Props = {};
-export default function WidgetSelect(props: Props) {
+export default function WidgetSelect() {
     // State of selected widget name
     const [selectedWidget, setSelectedWidget] =
         useState<WidgetName | null>(null);
@@ -43,7 +50,7 @@ export default function WidgetSelect(props: Props) {
 
     // Object with widget elements
     const widgets: { [ind in WidgetName]: React.ReactNode } = {
-        templateEdit: widgetTemplateEdit({onClose})
+        templateEdit: WidgetTemplateEditWrapper({onClose})
     }
 
     // Object with widget button texts
