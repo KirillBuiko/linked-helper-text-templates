@@ -2,7 +2,7 @@ import VariablesBlock from "@/components/widget-template-edit/VariablesBlock";
 import InsertConditionalBlockButton from "@/components/controls/insert-buttons/InsertConditionalBlockButton";
 import TemplateRecursiveBlock from "@/components/widget-template-edit/TemplateRecursiveBlock";
 import TemplateActionButtonsPanel from "@/components/widget-template-edit/TemplateActionButtonsPanel";
-import {type TemplateNode, TemplateNodeType, type TemplateTextNode, TemplateTree} from "@/utils/TemplateTree"
+import {type TemplateNode, type TemplateTextNode, TemplateTree} from "@/utils/TemplateTree"
 import {useState} from "react";
 import styles from "./WidgetTemplateEdit.module.scss";
 import TemplatePreviewOverlay from "@/components/widget-template-edit/TemplatePreviewOverlay";
@@ -62,12 +62,10 @@ export default function WidgetTemplateEdit(props: Props) {
         updateTemplateTree();
     }
 
-    /** Insert IF-THEN-ELSE to last clicked text block */
+    /** Insert IF-THEN-ELSE to last clicked block */
     function insertConditionalBlock() {
-        if (lastClickedBlock.type !== TemplateNodeType.CONDITIONAL_NODE) {
-            templateTree.insertConditionalNode(lastClickedBlock, lastClickedIndex);
-            updateTemplateTree();
-        }
+        templateTree.insertConditionalNode(lastClickedBlock, lastClickedIndex);
+        updateTemplateTree();
     }
 
     /**
