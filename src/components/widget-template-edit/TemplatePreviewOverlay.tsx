@@ -17,14 +17,25 @@ type Props = {
 }
 
 export default function TemplatePreviewOverlay(props: Props) {
+    // State with empty input values
     const [values, setValues] = useState(
         props.arrVarNames.reduce((acc, val) => {
             acc[val] = "";
             return acc;
         }, {} as Record<string, string>)
     );
+
+    // Trying to parse template and values to text array
     const parsedArray = props.template ? parseTemplateMessage(props.template, values) : [];
 
+    function onSetValue(key: string, value: string) {
+        if (key in values) {
+            values[key] = value;
+        }
+        setValues(Object.assign({}, values));
+    }
+
+    // Map array to plain or colored text
     const parsedElements = parsedArray ? parsedArray.map((text, ind) => (
         <>
             {
@@ -38,13 +49,7 @@ export default function TemplatePreviewOverlay(props: Props) {
         </>
     )) : "";
 
-    function onSetValue(key: string, value: string) {
-        if (key in values) {
-            values[key] = value;
-        }
-        setValues(Object.assign({}, values));
-    }
-
+    // Map var names to inputs
     const variableInputs = props.arrVarNames.map((v, ind) => (
         <VariableValueInput key={ind}
                             onChange={(val) => onSetValue(v, val)}

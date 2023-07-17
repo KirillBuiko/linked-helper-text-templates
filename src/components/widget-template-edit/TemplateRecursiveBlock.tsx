@@ -9,10 +9,12 @@ type Props = { props: TemplateBlockPropsType }
 export default function TemplateRecursiveBlock({props}: Props) {
     const [clip, setClip] = useState("unset");
 
-    useEffect(()=>{
+    // Effect of block creating
+    useEffect(() => {
         setClip('0');
     }, [setClip]);
 
+    // Create current block element by its type
     let templateBlock;
     switch (props.currentNode.type) {
         case TemplateNodeType.CONDITIONAL_NODE:

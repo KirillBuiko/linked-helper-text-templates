@@ -1,5 +1,6 @@
 import {TemplateConditionalNode, TemplateTree} from "@/utils/TemplateTree";
 
+/** Prepare template tree with conditional node */
 export function prepareTree(arrVarNames = ["var1", "var2", "var3"]) {
     const tree = new TemplateTree(arrVarNames)
     tree.rootNode.text = "Start text ";
@@ -11,6 +12,7 @@ export function prepareTree(arrVarNames = ["var1", "var2", "var3"]) {
     return tree;
 }
 
+/** Prepare template tree with two conditional nodes */
 export function prepareTree2(arrVarNames = ["var1", "var2", "var3"]) {
     const tree = new TemplateTree(arrVarNames)
     tree.rootNode.text = "Start text ";

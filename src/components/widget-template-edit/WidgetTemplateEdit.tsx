@@ -11,9 +11,10 @@ type Props = {
     callbackSave: (arrVarNames: string[], template: TemplateTree) => Promise<void>,
     arrVarNames: string[],
     template?: TemplateTree,
-    onClose: ()=>void
+    onClose: () => void
 };
 export default function WidgetTemplateEdit(props: Props) {
+    // State of template tree
     const [templateTree, setTemplateTree] =
         useState(() => {
             let templateTree: TemplateTree;
@@ -27,24 +28,32 @@ export default function WidgetTemplateEdit(props: Props) {
             }
             return templateTree;
         });
+
+    //State of last clicked block (for insert IF-THEN-ELSE and variables)
     const [lastClickedBlock, setLastClickedBlock] =
         useState<TemplateTextNode>(templateTree.rootNode);
+
+    //State of last clicked index (for insert IF-THEN-ELSE and variables)
     const [lastClickedIndex, setLastClickedIndex] =
         useState(0);
+
+    //State of template tree for preview (copy of current template tree)
     const [previewTemplate, setPreviewTemplate] =
         useState<TemplateTree | undefined>(undefined);
 
+    /** Make shallow copy of template tree and set */
     function updateTemplateTree() {
-        // Make shallow copy of tree and set
         const newTree = Object.assign(new TemplateTree(props.arrVarNames), templateTree);
         setTemplateTree(newTree);
     }
 
+    /** Delete node from template tree */
     function deleteNode(node: TemplateNode) {
         templateTree.deleteNode(node);
         updateTemplateTree();
     }
 
+    /** Insert variable to last clicked text block */
     function insertVariable(variable: string) {
         const varToInsert = `{${variable}}`;
         lastClickedBlock.text = lastClickedBlock.text.slice(0, lastClickedIndex) +
@@ -53,34 +62,38 @@ export default function WidgetTemplateEdit(props: Props) {
         updateTemplateTree();
     }
 
+    /** Insert IF-THEN-ELSE to last clicked text block */
     function insertConditionalBlock() {
-        // TODO: Think about on conditional node click behavior!
         if (lastClickedBlock.type !== TemplateNodeType.CONDITIONAL_NODE) {
             templateTree.insertConditionalNode(lastClickedBlock, lastClickedIndex);
             updateTemplateTree();
         }
     }
 
+    /**
+     * Save template tree
+     */
     function onSave() {
         props.callbackSave(props.arrVarNames, templateTree).then(() => {
             alert("Save completed");
         });
     }
 
+    /** Close widget, ask to save */
     function onClose() {
         props.onClose();
         const result = confirm("Do you want to save template?");
         if (result) {
             onSave();
         }
-        // TODO: ask user about save
     }
 
+    /** Open preview with copy of template tree */
     function onPreview() {
-        // TODO: show preview (add component to render)
         setPreviewTemplate(JSON.parse(templateTree.toString()));
     }
 
+    /** Close preview */
     function onPreviewClose() {
         setPreviewTemplate(undefined);
     }

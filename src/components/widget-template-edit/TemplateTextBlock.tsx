@@ -3,7 +3,7 @@ import ControlTextArea from "@/components/controls/ControlTextArea";
 import styles from './TemplateTextBlock.module.scss';
 import {TemplateTextNode} from "@/utils/TemplateTree";
 
-type Props = {props: TemplateBlockPropsType & {placeholder?: string}}
+type Props = { props: TemplateBlockPropsType & { placeholder?: string } }
 export default function TemplateTextBlock({props}: Props) {
     return (
         <div className={styles.wrapper}>

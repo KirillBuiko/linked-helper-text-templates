@@ -32,20 +32,26 @@ function widgetTemplateEdit(props: { onClose: () => void }) {
 
 type Props = {};
 export default function WidgetSelect(props: Props) {
+    // State of selected widget name
     const [selectedWidget, setSelectedWidget] =
         useState<WidgetName | null>(null);
 
+    // Close widget
     function onClose() {
         setSelectedWidget(null);
     }
 
+    // Object with widget elements
     const widgets: { [ind in WidgetName]: React.ReactNode } = {
         templateEdit: widgetTemplateEdit({onClose})
     }
+
+    // Object with widget button texts
     const buttonsText: { [ind in WidgetName]: React.ReactNode } = {
         templateEdit: "Message template editor"
     }
 
+    // Map widget names to widget open buttons
     const widgetsButtonsList = (
         <div className={styles.selectWidgetWrapper}>
             {(Object.keys(widgets) as WidgetName[]).map(

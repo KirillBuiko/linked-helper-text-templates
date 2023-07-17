@@ -12,6 +12,8 @@ type Props = { props: TemplateBlockPropsType }
 export default function TemplateConditionalBlock({props}: Props) {
     return (
         <div className={styles.wrapper}>
+
+            {/* Add IF row with text block */}
             <div className={styles.blockRow}>
                 <div className={styles.blockDescription}>
                     <IfIcon/>
@@ -24,6 +26,8 @@ export default function TemplateConditionalBlock({props}: Props) {
                     }}/>
                 </div>
             </div>
+
+            {/* Add THEN row with recursive block */}
             <div className={styles.blockRow}>
                 <div className={styles.blockDescription}>
                     <div className={styles.thenWrapper}>
@@ -38,6 +42,8 @@ export default function TemplateConditionalBlock({props}: Props) {
                     }}/>
                 </div>
             </div>
+
+            {/* Add ELSE row with recursive block */}
             <div className={styles.blockRow}>
                 <div className={styles.blockDescription}>
                     <ElseIcon/>

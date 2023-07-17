@@ -3,32 +3,7 @@ export enum TemplateNodeType {
     CONDITIONAL_NODE
 }
 
-export abstract class TemplateNode {
-    nextNode: TemplateNode | null;
-
-    protected constructor(public type: TemplateNodeType, public text = "") {
-        this.nextNode = null;
-    }
-}
-
-export class TemplateTextNode extends TemplateNode {
-    constructor(text = "") {
-        super(TemplateNodeType.TEXT_NODE, text);
-        this.text = text;
-    }
-}
-
-export class TemplateConditionalNode extends TemplateNode {
-    thenNode: TemplateTextNode;
-    elseNode: TemplateTextNode;
-
-    constructor() {
-        super(TemplateNodeType.CONDITIONAL_NODE, "");
-        this.thenNode = new TemplateTextNode("");
-        this.elseNode = new TemplateTextNode("");
-    }
-}
-
+/** Template tree class */
 export class TemplateTree {
     rootNode: TemplateTextNode;
 
@@ -36,7 +11,7 @@ export class TemplateTree {
         this.rootNode = new TemplateTextNode("Hello!");
 
         if (template) {
-            if(template.rootNode) {
+            if (template.rootNode) {
                 this.rootNode = template.rootNode;
             } else {
                 throw new Error("Template is invalid");
@@ -46,26 +21,30 @@ export class TemplateTree {
         }
     }
 
+    /** Init default tree with one conditional node */
     initDefaultTree() {
         this.rootNode.nextNode = new TemplateConditionalNode();
         this.rootNode.nextNode.nextNode = new TemplateTextNode("Bye!");
     }
 
+    /** Search and delete node from tree */
     deleteNode(node: TemplateNode | null, current: TemplateNode | null = this.rootNode): boolean {
         if (!node || !current) return false;
         if (current.nextNode === node) {
-            // Skip block to delete
+            // Delete node
             current.nextNode = node.nextNode;
             // Merge two nearby text blocks
             if (current.nextNode && current.nextNode.type === TemplateNodeType.TEXT_NODE &&
                 current.type === TemplateNodeType.TEXT_NODE) {
-                (current as TemplateTextNode).text += (current.nextNode as TemplateTextNode).text;
+                current.text += current.nextNode.text;
                 current.nextNode = current.nextNode.nextNode;
             }
             return true;
         } else if (current.type === TemplateNodeType.TEXT_NODE) {
+            // If text node - search in next node
             return this.deleteNode(node, current.nextNode);
         } else if (current.type === TemplateNodeType.CONDITIONAL_NODE) {
+            // If conditional node - search in then, else and next
             return this.deleteNode(node, (current as TemplateConditionalNode).thenNode)
                 || this.deleteNode(node, (current as TemplateConditionalNode).elseNode)
                 || this.deleteNode(node, (current as TemplateConditionalNode).nextNode);
@@ -73,6 +52,7 @@ export class TemplateTree {
         return false;
     }
 
+    /** Split text node and insert conditional node between them */
     insertConditionalNode(node: TemplateTextNode, cursor: number = -1) {
         // Create new textNode and conditionalNode
         const newTextNode =
@@ -87,8 +67,33 @@ export class TemplateTree {
         node.nextNode = newConditionalNode;
         newConditionalNode.nextNode = newTextNode;
     }
+}
 
-    toString() {
-        return JSON.stringify(this);
+/** Base template tree node class */
+export abstract class TemplateNode {
+    nextNode: TemplateNode | null;
+
+    protected constructor(public type: TemplateNodeType, public text = "") {
+        this.nextNode = null;
+    }
+}
+
+/** Text node class */
+export class TemplateTextNode extends TemplateNode {
+    constructor(text = "") {
+        super(TemplateNodeType.TEXT_NODE, text);
+        this.text = text;
+    }
+}
+
+/** Conditional node class */
+export class TemplateConditionalNode extends TemplateNode {
+    thenNode: TemplateTextNode;
+    elseNode: TemplateTextNode;
+
+    constructor() {
+        super(TemplateNodeType.CONDITIONAL_NODE, "");
+        this.thenNode = new TemplateTextNode("");
+        this.elseNode = new TemplateTextNode("");
     }
 }
