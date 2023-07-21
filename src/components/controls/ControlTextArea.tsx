@@ -32,8 +32,8 @@ export default function ControlTextArea(props: Props) {
                               onInput={onInput}
                               onFocus={onFocus}
                               onClick={onFocus}
+                              onKeyUp={onFocus}
                               minRows={1}
-                              maxRows={5}
                               placeholder={placeHolder}/>
         </div>
     )
